@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +40,11 @@ namespace SuperBook
         public string info()
         {
             return $"Data da devolução: {DataDevolucaoPrevista}\n";
+        }
+
+        public string infoDisponivel()
+        {          
+            return $"Livro está disponivel: {Disponivel}";            
         }
     }
 }

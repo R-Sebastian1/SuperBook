@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -347,6 +348,7 @@ namespace SuperBook
             foreach (Livros livros in listaLivros)
             {
                 Console.WriteLine(livros.informacao());
+                Console.WriteLine(livros.infoDisponivel()); //aqui mostra na listagem dos livros que está ou não disponivel!
             }
         }
 
@@ -385,8 +387,7 @@ namespace SuperBook
                     livro.DataEmprestimo = DateTime.Now;
                     livro.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);//minutos (melhor) se for superior, ativa as penalidades
                     Console.WriteLine("Livro emprestado com successo!");
-                    Console.WriteLine(livro.info());
-               
+                    Console.WriteLine(livro.info());             
 
              }
              else
@@ -408,15 +409,25 @@ namespace SuperBook
             var livro = listaLivros[index];
 
             if (livro.Devolvido)
+
             {
                 livro.Devolvido = utilizador;
-                //livro.DataEmprestimo buscar o valor do emprestimo (7dias)
-                Console.WriteLine("Livro devolvido");
+                livro.DataEmprestimo = DateTime.Now;
+                var tempo = livro.DataDevolucaoPrevista- livro.DataEmprestimo;
+                Console.WriteLine($"Data restante para penalisação: {tempo}");
+                if(livro.Devolvido!=true)//aqui da para ver ao devolver o livro, o gajo trouxe o livro a tempo
+                {
+                    Console.WriteLine("Ira haver penalização");
+                }
+                else
+                {
+                    Console.WriteLine("Não haverá penalização");
+                }
 
             }
             else
             {
-                Console.WriteLine("Livro já devolvido");
+                Console.WriteLine("Livro não disponível para empréstimo");
             }
         }
 
