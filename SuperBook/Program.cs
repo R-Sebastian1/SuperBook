@@ -24,8 +24,8 @@ namespace SuperBook
                 Console.WriteLine("\t\t\t\t\t ********** Biblioteca Super Book ********** \n\t");
                 Console.WriteLine("\t\t\t\t\t ************* Seja bem vindo ************** \n\t");
                 Console.WriteLine("\t\t\t\t\t *        Escolha o que pretende fazer     * \n\t");
-                Console.WriteLine("\t\t\t\t\t *         1 - Utilizadores                * \n\t");   /* Aqui é o menu principal */
-                Console.WriteLine("\t\t\t\t\t *         2 - Utilizadores VIP            * \n\t");
+                Console.WriteLine("\t\t\t\t\t *         1 - Inserir Utilizadores        * \n\t");   /* Aqui é o menu principal */
+                Console.WriteLine("\t\t\t\t\t *         2 - Inserir Utilizadores VIP    * \n\t");
                 Console.WriteLine("\t\t\t\t\t *         3 - Livros                      * \n\t");
                 Console.WriteLine("\t\t\t\t\t *         3 - Guardar e sair              * \n\t");
                 Console.WriteLine("\t\t\t\t\t ******************************************* \n\t");
@@ -372,7 +372,6 @@ namespace SuperBook
             int opcao;
             do
             {
-                Console.Clear();
                 Console.WriteLine("\n\n\n\n");
                 Console.WriteLine("\t\t\t\t\t *********************************************** \n\t");
                 Console.WriteLine("\t\t\t\t\t *        Está na secção de emprestar livros   * \n\t");
@@ -393,7 +392,7 @@ namespace SuperBook
                         var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
                         var livro = listaLivros[index];
 
-                        if (livro.Disponivel)
+                        if (livro.Disponivel==true)
 
                         {
                             livro.Disponivel = utilizador;
@@ -401,13 +400,12 @@ namespace SuperBook
                             livro.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);//minutos (melhor) se for superior, ativa as penalidades
                             Console.WriteLine("Livro emprestado com successo!");
                             Console.WriteLine(livro.info());
-
                         }
                         else
                         {
                             Console.WriteLine("Livro não disponível para empréstimo");
                         }
-                    break;
+                        break;
                     case 2:
                         Console.Write("Insira o ID do livro que quer emprestar: ");
                         var idLivros1 = int.Parse(Console.ReadLine());
@@ -417,7 +415,7 @@ namespace SuperBook
                         var index3 = listaUtilizadorVIP.FindIndex(utilizadorVIP => utilizadorVIP.id == idUtilizadorVIP);
                         var livro1 = listaLivros[index2];
 
-                        if(livro1.Disponivel)
+                        if(livro1.Disponivel==true)
                         {
                             livro1.Disponivel = utilizadorVIP;
                             livro1.DataEmprestimo = DateTime.Now;
@@ -428,6 +426,8 @@ namespace SuperBook
                         {
                             Console.WriteLine("Livro não está disponível para empréstimo!");
                         }
+                        break;
+                    default:
                         break;
 
                 }
@@ -440,7 +440,6 @@ namespace SuperBook
             int opcao;
             do
             {
-                Console.Clear();
                 Console.WriteLine("\n\n\n\n");
                 Console.WriteLine("\t\t\t\t\t *********************************************** \n\t");
                 Console.WriteLine("\t\t\t\t\t *        Está na secção de devolver livros    * \n\t");
@@ -466,7 +465,7 @@ namespace SuperBook
                             livro.Devolvido = utilizador;
                             livro.DataEmprestimo = DateTime.Now;
                             var tempo = livro.DataDevolucaoPrevista - livro.DataEmprestimo;
-                            Console.WriteLine($"Data restante para penalização: {tempo}");
+                            Console.WriteLine($"Tempo restante até à penalização: {tempo}");
                             if(livro.Devolvido!=true)
                             {
                                 Console.WriteLine("Ira haver penalização!");
@@ -494,7 +493,7 @@ namespace SuperBook
                             livro1.Devolvido = utilizadorVIP;
                             livro1.DataEmprestimo = DateTime.Now;
                             var tempo1 = livro1.DataDevolucaoPrevista - livro1.DataEmprestimo;
-                            Console.WriteLine($"Data restante para penalização: {tempo1}");
+                            Console.WriteLine($"Tempo restante até à penalização: {tempo1}");
                             if(livro1.Devolvido!=true)
                             {
                                 Console.WriteLine("Ira haver penalização!");

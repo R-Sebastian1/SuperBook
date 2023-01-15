@@ -45,7 +45,7 @@ namespace SuperBook
 
         public string infoDisponivel()
         {          
-            return $"Livro está disponivel: {Disponivel}";            
+            return $"Livro está disponivel: {Disponivel}.";            
         }
     }
 }

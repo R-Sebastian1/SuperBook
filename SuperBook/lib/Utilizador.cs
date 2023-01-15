@@ -9,11 +9,11 @@ namespace SuperBook
             this.nome = nome;
             this.id = id;
         }
-
+        public Livros livros;
         
         public override string informacao()
         {
-            return $"Nome do utilizador: {nome}.\nID do utilizador: {id}.\n";
+            return $"Nome do utilizador: {nome}.\nID do utilizador: {id}.\n"; //Livro emprestado: { livros.informacao}
         }
     }
 }
