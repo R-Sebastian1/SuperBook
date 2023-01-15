@@ -19,6 +19,7 @@ namespace SuperBook
         //meter um if a validar se tem utilizador/livro (ativos-criados)
         //podemos usar um foreach
         public Utilizador Utilizador { get; internal set; }
+        public UtilizadorVIP UtilizadorVIP { get; internal set; }
         public DateTime DataEmprestimo { get; internal set; }
         public DateTime DataDevolucaoPrevista { get; internal set; }
 

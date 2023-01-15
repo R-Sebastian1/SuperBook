@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SuperBook
@@ -10,10 +11,6 @@ namespace SuperBook
         static List<Utilizador> listaUtilizador = new List<Utilizador>();       //a lista do Utilizador normal
         static List<UtilizadorVIP> listaUtilizadorVIP = new List<UtilizadorVIP>();  //a lista do utilizador VIP
         static List<Livros> listaLivros = new List<Livros>();   //lista dos livros
-
-        //+1 lista requisições-tem de ter um bool e juntar as penalidades
-        //+1 lista de livros emprestados --esta lista tem de ter penalidades
-        //3 penalidades com comparação da data atual com a data do emprestimo
 
         static void Main(string[] args)
         {
@@ -178,11 +175,11 @@ namespace SuperBook
                         pressionarEnterParaContinuar();
                         break;
                         case 5:
-                        emprestarLivro(false);
+                        emprestarLivro(false,false);
                         pressionarEnterParaContinuar();
                         break;
                     case 6:
-                        devolveLivro(true);
+                        devolveLivro(true,true);
                         pressionarEnterParaContinuar();
                         break;
                     default:
@@ -193,6 +190,7 @@ namespace SuperBook
         }
         private static void inserirUtilizador()
         {
+           
             Console.Write("Insira o nome do novo utilizador: ");
             var nome = Console.ReadLine();
             Console.Write("Insira um ID ao utilizador: ");
@@ -369,66 +367,146 @@ namespace SuperBook
             }
         }
 
-        private static void emprestarLivro(bool utilizador)    //não faço ideia o que estou a fazer !! XD
+        private static void emprestarLivro(bool utilizador, bool utilizadorVIP)    //empresta livro e faz um data set
         {
-            Console.WriteLine("Quer emprestar um livro a um Utilizador?");
-            Console.WriteLine("Insira o ID do livro que quer emprestar: ");
-            var idLivros= int.Parse(Console.ReadLine());
-            Console.WriteLine("Insira o ID do utilizador a quem quer emprestar o livro: ");
-            var idUtilizador= int.Parse(Console.ReadLine());
-            var index = listaLivros.FindIndex(livros => livros.id == idLivros);
-            var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
-            var livro = listaLivros[index];
+            int opcao;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("\n\n\n\n");
+                Console.WriteLine("\t\t\t\t\t *********************************************** \n\t");
+                Console.WriteLine("\t\t\t\t\t *        Está na secção de emprestar livros   * \n\t");
+                Console.WriteLine("\t\t\t\t\t *         Selecione quem irá levar o livro    * \n\t");
+                Console.WriteLine("\t\t\t\t\t *            1 - Utilizador Comum             * \n\t");
+                Console.WriteLine("\t\t\t\t\t *              2 - Utilizador VIP             * \n\t");
+                Console.WriteLine("\t\t\t\t\t *                 0 - Voltar                  * \n\t");
+                Console.WriteLine("\t\t\t\t\t *********************************************** \n\t");
+                opcao = int.Parse(Console.ReadLine());
+                switch(opcao)
+                {
+                    case 1:
+                        Console.Write("Insira o ID do livro que quer emprestar: ");
+                        var idLivros = int.Parse(Console.ReadLine());
+                        Console.Write("Insira o ID do utilizador a quem quer emprestar o livro: ");
+                        var idUtilizador = int.Parse(Console.ReadLine());
+                        var index = listaLivros.FindIndex(livros => livros.id == idLivros);
+                        var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
+                        var livro = listaLivros[index];
 
-             if(livro.Disponivel)
+                        if (livro.Disponivel)
 
-             {
-                    livro.Disponivel = utilizador;
-                    livro.DataEmprestimo = DateTime.Now;
-                    livro.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);//minutos (melhor) se for superior, ativa as penalidades
-                    Console.WriteLine("Livro emprestado com successo!");
-                    Console.WriteLine(livro.info());             
+                        {
+                            livro.Disponivel = utilizador;
+                            livro.DataEmprestimo = DateTime.Now;
+                            livro.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);//minutos (melhor) se for superior, ativa as penalidades
+                            Console.WriteLine("Livro emprestado com successo!");
+                            Console.WriteLine(livro.info());
 
-             }
-             else
-             {
-                    Console.WriteLine("Livro não disponível para empréstimo");
-             }
-           
+                        }
+                        else
+                        {
+                            Console.WriteLine("Livro não disponível para empréstimo");
+                        }
+                    break;
+                    case 2:
+                        Console.Write("Insira o ID do livro que quer emprestar: ");
+                        var idLivros1 = int.Parse(Console.ReadLine());
+                        Console.Write("Insira o ID do Utilizador VIP a quem quer emprestar o livro: ");
+                        var idUtilizadorVIP = int.Parse(Console.ReadLine());
+                        var index2 = listaLivros.FindIndex(livros => livros.id == idLivros1);
+                        var index3 = listaUtilizadorVIP.FindIndex(utilizadorVIP => utilizadorVIP.id == idUtilizadorVIP);
+                        var livro1 = listaLivros[index2];
+
+                        if(livro1.Disponivel)
+                        {
+                            livro1.Disponivel = utilizadorVIP;
+                            livro1.DataEmprestimo = DateTime.Now;
+                            livro1.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);
+                            Console.WriteLine("Livro emprestado com sucesso");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Livro não está disponível para empréstimo!");
+                        }
+                        break;
+
+                }
+            } while (opcao != 0);            
+
         }
 
-        private static void devolveLivro(bool utilizador)
+        private static void devolveLivro(bool utilizador, bool utilizadorVIP) //devole livro e verifica as datas para ver se haverá penalizações
         {
-            Console.WriteLine("Quer devolver um livro a um Utilizador?");
-            Console.WriteLine("Insira o ID do livro que quer devolver: ");
-            var idLivros = int.Parse(Console.ReadLine());
-            Console.WriteLine("Insira o ID do utilizador a quem quer devolver o livro: ");
-            var idUtilizador = int.Parse(Console.ReadLine());
-            var index = listaLivros.FindIndex(livros => livros.id == idLivros);
-            var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
-            var livro = listaLivros[index];
-
-            if (livro.Devolvido)
-
+            int opcao;
+            do
             {
-                livro.Devolvido = utilizador;
-                livro.DataEmprestimo = DateTime.Now;
-                var tempo = livro.DataDevolucaoPrevista- livro.DataEmprestimo;
-                Console.WriteLine($"Data restante para penalisação: {tempo}");
-                if(livro.Devolvido!=true)//aqui da para ver ao devolver o livro, o gajo trouxe o livro a tempo
+                Console.Clear();
+                Console.WriteLine("\n\n\n\n");
+                Console.WriteLine("\t\t\t\t\t *********************************************** \n\t");
+                Console.WriteLine("\t\t\t\t\t *        Está na secção de devolver livros    * \n\t");
+                Console.WriteLine("\t\t\t\t\t *        Selecione quem irá devolver livros   * \n\t");
+                Console.WriteLine("\t\t\t\t\t *            1 - Utilizador Comum             * \n\t");
+                Console.WriteLine("\t\t\t\t\t *              2 - Utilizador VIP             * \n\t");
+                Console.WriteLine("\t\t\t\t\t *                 0 - Voltar                  * \n\t");
+                Console.WriteLine("\t\t\t\t\t *********************************************** \n\t");
+                opcao = int.Parse(Console.ReadLine());
+                switch(opcao)
                 {
-                    Console.WriteLine("Ira haver penalização");
-                }
-                else
-                {
-                    Console.WriteLine("Não haverá penalização");
-                }
+                    case 1:
+                        Console.WriteLine("Insira o ID do livro que quer devolver: ");
+                        var idLivros = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Insira o ID do utilizador que devolve o livro: ");
+                        var idUtilizador = int.Parse(Console.ReadLine());
+                        var index = listaLivros.FindIndex(livros => livros.id == idLivros);
+                        var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
+                        var livro = listaLivros[index];
 
-            }
-            else
-            {
-                Console.WriteLine("Livro não disponível para empréstimo");
-            }
+                        if(livro.Devolvido)
+                        {
+                            livro.Devolvido = utilizador;
+                            livro.DataEmprestimo = DateTime.Now;
+                            var tempo = livro.DataDevolucaoPrevista - livro.DataEmprestimo;
+                            Console.WriteLine($"Data restante para penalização: {tempo}");
+                            if(livro.Devolvido!=true)
+                            {
+                                Console.WriteLine("Ira haver penalização!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Não haverá penalização");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Livro já devolvido!");
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("Insira o ID do livro que quer devolver: ");
+                        var idLivros1 = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Insira o ID do utilizador VIP que devolve o livro: ");
+                        var idUtilizadorVIP = int.Parse(Console.ReadLine());
+                        var index2 = listaLivros.FindIndex(livros => livros.id == idLivros1);
+                        var index3 = listaUtilizadorVIP.FindIndex(utilizadorVIP => utilizadorVIP.id == idUtilizadorVIP);
+                        var livro1 = listaLivros[index2];
+                        if(livro1.Devolvido)
+                        {
+                            livro1.Devolvido = utilizadorVIP;
+                            livro1.DataEmprestimo = DateTime.Now;
+                            var tempo1 = livro1.DataDevolucaoPrevista - livro1.DataEmprestimo;
+                            Console.WriteLine($"Data restante para penalização: {tempo1}");
+                            if(livro1.Devolvido!=true)
+                            {
+                                Console.WriteLine("Ira haver penalização!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Livro já devolvido!");
+                            }
+                        }
+                        break;
+                }
+            } while (opcao != 0);
         }
 
         private static void pressionarEnterParaContinuar()  //com isto permite que a info apareça :D
