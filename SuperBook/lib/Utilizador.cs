@@ -9,8 +9,9 @@ namespace SuperBook
             this.nome = nome;
             this.id = id;
         }
-        public Livros livros;
-        
+        public List<Livros> livro = new List<Livros>();//lista aqui
+        //public Livros livro;
+
         public override string informacao()
         {
             return $"Nome do utilizador: {nome}.\nID do utilizador: {id}.\n"; //Livro emprestado: { livros.informacao}

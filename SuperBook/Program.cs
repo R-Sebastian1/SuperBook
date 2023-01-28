@@ -11,6 +11,7 @@ namespace SuperBook
         static List<Utilizador> listaUtilizador = new List<Utilizador>();       //a lista do Utilizador normal
         static List<UtilizadorVIP> listaUtilizadorVIP = new List<UtilizadorVIP>();  //a lista do utilizador VIP
         static List<Livros> listaLivros = new List<Livros>();   //lista dos livros
+        static List<Livros> livros = new List<Livros>();
 
         static void Main(string[] args)
         {
@@ -190,7 +191,6 @@ namespace SuperBook
         }
         private static void inserirUtilizador()
         {
-           
             Console.Write("Insira o nome do novo utilizador: ");
             var nome = Console.ReadLine();
             Console.Write("Insira um ID ao utilizador: ");
@@ -227,6 +227,7 @@ namespace SuperBook
             foreach (Utilizador utilizador in listaUtilizador)  //percorre os elementos
             {
                 Console.WriteLine(utilizador.informacao()); //e da a informaça dos elementos existentes
+
             }
         }
 
@@ -390,16 +391,16 @@ namespace SuperBook
                         var idUtilizador = int.Parse(Console.ReadLine());
                         var index = listaLivros.FindIndex(livros => livros.id == idLivros);
                         var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
-                        var livro = listaLivros[index];
+                        var livros = listaLivros[index];
 
-                        if (livro.Disponivel==true)
+                        if (livros.Disponivel ==true)
 
                         {
-                            livro.Disponivel = utilizador;
-                            livro.DataEmprestimo = DateTime.Now;
-                            livro.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);//minutos (melhor) se for superior, ativa as penalidades
+                            livros.Disponivel = utilizador;
+                            livros.DataEmprestimo = DateTime.Now;
+                            livros.DataDevolucaoPrevista = DateTime.Now.AddMinutes(1);//minutos (melhor) se for superior, ativa as penalidades
                             Console.WriteLine("Livro emprestado com successo!");
-                            Console.WriteLine(livro.info());
+                            Console.WriteLine(livros.info());
                         }
                         else
                         {
@@ -452,23 +453,41 @@ namespace SuperBook
                 switch(opcao)
                 {
                     case 1:
-                        Console.WriteLine("Insira o ID do livro que quer devolver: ");
+
+                        Console.Write("Insira o ID do livro que quer devolver: ");
                         var idLivros = int.Parse(Console.ReadLine());
-                        Console.WriteLine("Insira o ID do utilizador que devolve o livro: ");
+                        Console.Write("Insira o ID do utilizador que devolve o livro: ");
                         var idUtilizador = int.Parse(Console.ReadLine());
                         var index = listaLivros.FindIndex(livros => livros.id == idLivros);
                         var index1 = listaUtilizador.FindIndex(utilizador => utilizador.id == idUtilizador);
-                        var livro = listaLivros[index];
+                        var livros = listaLivros[index];
 
-                        if(livro.Devolvido)
+                        if(livros.Devolvido)
                         {
-                            livro.Devolvido = utilizador;
-                            livro.DataEmprestimo = DateTime.Now;
-                            var tempo = livro.DataDevolucaoPrevista - livro.DataEmprestimo;
+                            livros.Devolvido = utilizador;
+                            livros.DataEmprestimo = DateTime.Now;
+                            var tempo = livros.DataDevolucaoPrevista - livros.DataEmprestimo;
                             Console.WriteLine($"Tempo restante até à penalização: {tempo}");
-                            if(livro.Devolvido!=true)
+
+                            int minutos = tempo.Minutes;
+                            int secundos = tempo.Seconds;
+
+                            if (livros.Devolvido!=true)
                             {
                                 Console.WriteLine("Ira haver penalização!");
+                                if(minutos<=0) //aqui está a penalização para quem traz os livros atrasados
+                                {
+                                    Console.WriteLine("Penalidade leve - 1 euro"); //podemos fazer um switch case para penalidades!
+                                }
+                                else if (minutos < -2)
+                                {
+                                    Console.WriteLine("Penalidade média - 2 euros");
+                                }
+                                else if (minutos < -3)
+                                {
+                                    Console.WriteLine("Penalidade grave - 3 euros");
+                                }
+      
                             }
                             else
                             {
@@ -494,14 +513,35 @@ namespace SuperBook
                             livro1.DataEmprestimo = DateTime.Now;
                             var tempo1 = livro1.DataDevolucaoPrevista - livro1.DataEmprestimo;
                             Console.WriteLine($"Tempo restante até à penalização: {tempo1}");
-                            if(livro1.Devolvido!=true)
+
+                            int minutos = tempo1.Minutes;
+                            int secundos = tempo1.Seconds;
+
+                            if (livro1.Devolvido!=true)
                             {
                                 Console.WriteLine("Ira haver penalização!");
+                                Console.WriteLine("Ira haver penalização!");
+                                if (minutos <= 0) //aqui está a penalização para quem traz os livros atrasados
+                                {
+                                    Console.WriteLine("Penalidade leve - 1 euro"); //podemos fazer um switch case para penalidades!
+                                }
+                                else if (minutos < -2)
+                                {
+                                    Console.WriteLine("Penalidade média - 2 euros");
+                                }
+                                else if (minutos < -3)
+                                {
+                                    Console.WriteLine("Penalidade grave - 3 euros");
+                                }
                             }
                             else
                             {
-                                Console.WriteLine("Livro já devolvido!");
+                                Console.WriteLine("Não haverá penalização!");
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Livro já devolvido!");
                         }
                         break;
                 }

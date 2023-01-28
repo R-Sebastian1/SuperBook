@@ -16,10 +16,6 @@ namespace SuperBook
 
         public bool Disponivel { get; internal set; }
         public bool Devolvido { get; internal set; }
-        //meter um if a validar se tem utilizador/livro (ativos-criados)
-        //podemos usar um foreach
-        public Utilizador Utilizador { get; internal set; }
-        public UtilizadorVIP UtilizadorVIP { get; internal set; }
         public DateTime DataEmprestimo { get; internal set; }
         public DateTime DataDevolucaoPrevista { get; internal set; }
 
@@ -29,13 +25,13 @@ namespace SuperBook
             this.id = id;
             this.ListaAutores= ListaAutores;
             this.ano = ano;
-            this.Disponivel = true;
-            this.Devolvido = true;
+            Disponivel = true;
+            Devolvido = true;
             }
 
         public string informacao()
         {
-            Console.WriteLine("Os livros existentes");
+            Console.WriteLine("\nOs livros existentes\n");
             return $"Nome: {nome}.\nID: {id}.\nAutor: {ListaAutores}.\nAno: {ano}.\n";
         }
         public string info()

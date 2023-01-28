@@ -12,6 +12,7 @@ namespace SuperBook
             this.id = id;
 
         }
+        public List<Livros> livro1 = new List<Livros>();
 
         public override string informacao()
         {
